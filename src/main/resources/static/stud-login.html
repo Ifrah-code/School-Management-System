@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogIn</title>
+	<style>
+		body{
+			  font-family: Arial,sans-serif;
+			  background:linear-gradient(to right,rgb(89, 172, 255),rgb(255, 83, 255));
+					padding: 40px;
+					animation: fadeIn 2s ease-in;
+					}
+					@keyframes fadeIn{
+								from{opacity:0;}
+								to{opacity:1;}
+								}
+					form{
+									background: white;
+									padding:30px;
+									border-radius: 10px;
+									box-shadow: 0 0 10px #ccc;
+									max-width: 400px;
+									margin:auto;
+									}
+				
+										input[type="text"]
+										    {
+												width: 100%;
+												padding: 8px;
+												margin-top:5px;
+												box-sizing: border-box;
+												}
+												input[type="submit"] {
+													 margin-top: 20px;
+													 background-color: #28a745;
+												     color: white;
+												     padding: 10px;
+												     width: 100%;
+												     border: none;
+												     border-radius: 5px;
+												     font-size: 16px;
+												     transition: background-color 0.3s ease;
+												    }
+												 input[type="submit"]:hover {
+												          background-color: #218838;
+												    }
+													.h2,.h5{
+														color: white;
+														text-align: center;
+														font-family: Georgia, 'Times New Roman', Times, serif;
+														}
+														
+														.btn-log{
+															margin-top: 20px;
+												            background-color: #28a745;
+												            color: white;
+														    padding: 10px;
+															 width: 100%;
+													          border: none;
+															 border-radius: 5px;
+															font-size: 16px;
+															 transition: background-color 0.3s ease;
+													}
+															
+													
+	</style>
+</head>
+<body>
+	<h2 class="h2">LogIn</h2>
+	<h4 class="h5">User needs to register before logging in</h4>
+    <form action="/log-success.html">
+	
+		<input type="text" placeholder="Email address"><br><br>
+		<input type="text" placeholder="Password">
+		<button type="submit" class="btn-log">Log in</button>
+	</form>
+</body>
+</html>

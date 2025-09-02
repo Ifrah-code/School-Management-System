@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+<link  rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+	<style>
+		body{
+			font-family: Arial,sans-serif;
+			background:linear-gradient(to right,rgb(89, 172, 255),rgb(255, 83, 255));
+			padding: 40px;
+			animation: fadeIn 2s ease-in;
+			}
+			@keyframes fadeIn{
+						from{opacity:0;}
+						to{opacity:1;}
+						}
+						.container{
+							text-align: center;
+						}
+						form{
+							background: white;
+				            padding:30px;
+							border-radius: 10px;
+							box-shadow: 0 0 10px #ccc;
+							max-width: 400px;
+							margin:auto;
+						}
+						input[type="text"],
+					    input[type="email"],
+					    input[type="password"],
+					    input[type="number"]{
+							width: 100%;
+							padding: 8px;
+							margin-top:5px;
+							box-sizing: border-box;
+						}
+						input[type="submit"] {
+							 margin-top: 20px;
+							 background-color: #28a745;
+							 color: white;
+							 padding: 10px;
+							 width: 100%;
+							 border: none;
+							 border-radius: 5px;
+							 font-size: 16px;
+							 transition: background-color 0.3s ease;
+						 }
+						 input[type="submit"]:hover {
+						  background-color: #218838;
+							    }
+								 .eye-button {
+									 background: none;
+									 border: none;
+									 cursor: pointer;
+									 margin-left: -30px;
+									  position: absolute;
+							    }
+								 .password-wrapper {
+									 position: relative;
+								  }
+								  .h2{
+									text-align: center;
+									font-family: Georgia, 'Times New Roman', Times, serif;
+									}
+									.log{
+										margin-left: 28%;
+										color:green;
+										text-decoration: none;
+									    cursor:pointer;
+										}
+										.h3{
+											color: grey;
+											text-align: center;
+											font-size: small;
+											font-family: Georgia, 'Times New Roman', Times, serif;
+											}
+											.gender{
+												display: flex;
+												font-size: small;
+												font-family: Georgia, 'Times New Roman', Times, serif;
+												font-weight: 200;
+												color: grey;
+												}
+												.gen{
+													color: rgb(106, 106, 106);
+													}
+													.eye-button {
+														 position: absolute;
+													     top: 50%;
+													     right: 10px;
+													     transform: translateY(-50%);
+													     background: none;
+													     border: none;
+													     cursor: pointer;
+													     color: gray;
+													     font-size: 18px;
+													  }
+													  .password-wrapper {
+														 position: relative;
+													    }
+
+										
+									
+			
+	</style>
+	<script>
+		function ValidateForm()
+		{
+			const name = document.forms["studentForm"]["name"].value;
+			const password = document.forms["studentForm"]["password"].value;
+			const email=document.forms["studentForm"]["email"].value;
+			const age = document.forms["studentForm"]["age"].value;
+			let gender = "";
+			   const genderRadios = document.getElementsByName("gender");
+			   for (let i = 0; i < genderRadios.length; i++) {
+			       if (genderRadios[i].checked) {
+			           gender = genderRadios[i].value;
+			           break;
+			       }
+				   }
+				   
+					
+			const strongPwd=/^(?=.*[A-Z])(?=.*\d).{6,}$/;
+			
+			if(name.trim() === "" || email.trim() ==="" || age.trim()==="" || gender.trim()==="")
+			{
+				alert("All feilds are required");
+				return false;
+				}
+				
+				if(!strongPwd.test(password)){
+					alert("Password must be atleast 6 characters include one uppercase letter and one number ");
+					return false;
+					}
+					
+							
+		}
+
+	
+		function togglePassword()
+		{
+			const pwd = document.getElementById("password");
+			const icon = document.getElementById("eyeIcon");
+			
+			if(pwd.type === "password"){
+				pwd.type = "text";
+		      icon.classList.remove("fa-eye");
+				icon.classList.add("fa-eye-slash");
+				}else{
+					pwd.type = "password";
+					 icon.classList.remove("fa-eye-slash");
+					 icon.classList.add("fa-eye");
+					}
+				
+			
+			}
+			
+			
+			
+			fetch("https://ipapi.co/json/")
+			.then(response => response.json())
+			.then(data => {
+				document.getElementById("city").value = data.city || '';
+				       document.getElementById("region").value = data.region || '';
+				       document.getElementById("country").value = data.country_name || '';
+				       document.getElementById("location").value = `${data.city}, ${data.region}, ${data.country_name}`;
+			})
+			.catch(error => {
+				console.error("Geolocation fetch failed :",error);
+			});
+
+			
+		
+	</script>
+		
+</head>
+<body>
+    <form name="studentForm"  action="/api/users/save" method="POST" onsubmit="return ValidateForm()">
+		<h2 class="h2">Student Registration</h2>
+		<h3 class="h3">Its easy and quick!</h3>
+		
+		
+			<input placeholder="First Name" type="text" name="firstname" required>
+			<input placeholder="Last name" type="text" name="lastname" required>
+		
+		
+		     <input placeholder="Email address" type="email" name="email" required>
+			
+			
+			<input placeholder="Enter Your age " type="number" name="age" min="1" required>
+						
+						
+							<div class="password-wrapper">
+									<input  placeholder="New Password" type="password" name="password" id="password" required>
+									<button type="button" class="eye-button" onclick="togglePassword()">
+										<i id="eyeIcon" class="fa-solid fa-eye"></i>
+									</button>
+									</div><br>
+									
+									<div class="gender">
+									<lable  class ="gen">Gender</lable><br><br>
+									
+									
+									<label for="male">Male</label>
+									<input type="radio" id="male" name="gender" value="Male" >
+
+									<label for="female">Female</label>
+									<input type="radio" id="female" name="gender" value="Female">
+									
+									<label for="other">Others</label>
+									<input type="radio" id="other" name="gender" value="Other">
+									</div>
+									
+									<!--Hidden fields to store geolocation-->
+									<input type="hidden" id="city" name="city">
+									<input type="hidden" id="region" name="region">
+									<input type="hidden" id="country" name="country">
+									<input type="hidden" id="location" name="location">
+									
+									
+								
+								<input type="submit" value="Submit"><br><br>
+								<a href="/stud-login.html" class="log">Already have an account ?</a>
+		
+	</form>
+</body>
+</html>

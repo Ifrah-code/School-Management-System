@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details</title>
+	<style>
+		body{
+			 font-family: Arial,sans-serif;
+			   background:linear-gradient(to right,rgb(89, 172, 255),rgb(255, 83, 255));
+			   padding: 40px;
+		   }
+		   table{
+			width:90%;
+		    margin:auto;
+            border-collapse: collapse;
+			background-color: #ffffff;
+			border-radius: 12px;
+			overflow: hidden;
+			box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+		}
+		th,td{
+			padding: 14px 20px;
+			text-align: left;
+			border-bottom: 1px solid #ddd;
+			font-size: 15px;
+		}
+		th{
+			background-color:#0056b3 ;
+				color: white;
+				font-weight: bold;
+					text-transform: uppercase;
+				}
+				 tr:hover{
+					  background-color: #f1f8e9;
+				  }
+				    .action-buttons button
+					  {
+						  padding: 6px 12px;
+						  margin-right: 6px;
+						  border: none;
+						  border-radius: 5px;
+						  color: white;
+						 font-weight: bold;
+						 cursor: pointer;
+					   transition: background-color 0.3s ease;
+											 }
+											  .edit-btn {
+												   background-color: rgb(28, 136, 255);
+											    }
+
+												 .edit-btn:hover {
+													 background-color: #0056b3;
+												  }
+												   .delete-btn {
+													   background-color: #d32f2f;
+												   	 }
+													  .delete-btn:hover {
+														 background-color: #b71c1c;
+													  }
+													   .btn-out{
+															background-color: #0056b3;
+												            color: white;
+											             	padding: 10px;
+											            	border: 1px #0056b3;
+															  display: block;
+															    margin: 20px auto;
+																}
+															</style>
+</head>
+<body>
+    <h2 style="text-align: center; color: white;">Registered Users</h2>
+	<table id="userTable">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>FirstName</th>
+				<th>LastName</th>
+				<th>Email</th>
+				<th>Age</th>
+				<th>Gender</th>
+				<th>City</th>
+				<th>Region</th>
+			     <th>Country</th>
+				<th>Location</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody id="userTableBody">
+			
+		</tbody>
+	</table>
+	<script>
+		let currentlyEditingRowId = null;
+		window.onload = function (){
+			fetch('/api/users')
+			.then(response => response.json())
+			.then(data => {
+				const tbody = document.getElementById('userTableBody');
+				tbody.innerHTML = '';
+				data.forEach(user => {
+					const row = document.createElement('tr');
+					row.innerHTML = `
+					<td>${user.id}</td>
+					<td>${user.firstname}</td>
+					<td>${user.lastname}</td>
+					<td>${user.email}</td>
+					<td>${user.age}</td>
+					<td>${user.gender}</td>
+					<td>${user.city}</td>
+					<td>${user.region}</td>
+					<td>${user.country}</td>
+					<td>${user.location}</td>
+					<td>
+						<button class="edit-btn "onclick="showEditForm(${user.id} , '${user.firstname}','${user.lastname}','${user.email}',${user.age} ,${user.gender})">Edit</button><br>
+					<button class="delete-btn"onclick="deleteUser(${user.id})">Delete</button>	
+					</td>
+					`;
+					tbody.appendChild(row);
+					});
+				});
+			};
+			
+			function showEditForm(id,firstname,lastname,email,age){
+				if(currentlyEditingRowId !==null){
+					alert("You are already editing a row.Please save or cancel it first");
+					return;
+					}
+					
+					const tbody = document.getElementById('userTableBody');
+					const formRow = document.createElement('tr');
+					formRow.classList.add('edit-form-row');
+					formRow.innerHTML =`
+					<td>${id}</td>
+					
+					        <td><input type="text" id="editFirstName" value="${firstname}"></td>
+							<td><input type="text" id="editLastName" value="${lastname}"></td>
+					        <td><input type="email" id="editEmail" value="${email}"></td>
+					        <td><input type="number" id="editAge" value="${age}"></td>
+					        <td>
+					          <button onclick="saveEditedUser(${id}, this)">Save</button>
+					          <button onclick="cancelEdit(this)">Cancel</button>
+					        </td>
+					      `;
+					      tbody.appendChild(formRow);
+					      currentlyEditingRowId = id;
+					    }
+
+					    function cancelEdit(button) {
+					      const row = button.parentNode.parentNode;
+					      row.remove();
+					      currentlyEditingRowId = null;
+					    }
+
+					    function saveEditedUser(id, button) {
+					      const firstname = document.getElementById('editFirstName').value;
+						  const lastname = document.getElementById('editLastName').value;
+					      const email = document.getElementById('editEmail').value;
+					      const age = document.getElementById('editAge').value;
+
+					      const updatedUser = { firstname,lastname, email, age };
+
+					      fetch(`/api/users/${id}`, {
+					        method: 'PUT',
+					        headers: { 'Content-Type': 'application/json' },
+					        body: JSON.stringify(updatedUser)
+					      })
+					      .then(response => {
+					        if (response.ok) {
+					          alert("User updated successfully");
+					          location.reload();
+					        } else {
+					          alert("Update failed");
+					        }
+					      });
+
+					      currentlyEditingRowId = null;
+					    }
+
+					    function deleteUser(id) {
+					      if (confirm("Are you sure you want to delete this user?")) {
+					        fetch(`/api/users/${id}`, {
+					          method: 'DELETE'
+					        }).then(response => {
+					          if (response.ok) {
+					            alert("User deleted successfully");
+					            location.reload();
+					          } else {
+					            alert("Delete failed");
+					          }
+					        });
+					      }
+				
+				}
+			
+	</script>
+	<button  method="post"class="btn-out"onclick="location.href='admin-login.html'">Logout</button>
+</body>
+</html>
