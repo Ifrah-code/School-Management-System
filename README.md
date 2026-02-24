@@ -1,4 +1,4 @@
-A full-stack School Management System that helps manage students, teachers, classes, subjects, attendance, and more using Spring Boot, Thymeleaf, JavaScript, and MySQL.
+Educore is a  full-stack School Management System that helps manage students, teachers, classes, subjects, attendance, and more using Spring Boot, Thymeleaf, JavaScript, and MySQL.
 
 Features:-
 1] Admin authentication and authorization using Spring Security (login-protected admin panel).
